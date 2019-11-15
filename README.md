@@ -1,5 +1,7 @@
 # Event Invitation Sender
 
+<img width="1161" alt="screenshot" src="https://user-images.githubusercontent.com/33978990/68966550-6d9b3100-0804-11ea-919a-469d102acc69.png">
+
 ## Building instructions
 
 **NOTE**: Rabbit MQ needs to be installed for this application to work.
