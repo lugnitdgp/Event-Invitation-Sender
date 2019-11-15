@@ -7,7 +7,7 @@
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
-        <li style="list-style: none;" class="alert alert-primary">{{ message }}</li>
+        <li id="alert" style="list-style: none;" class="mclass alert alert-primary">{{ message }}</li>
         {% endfor %}
     </ul>
     {% endif %}
@@ -35,5 +35,12 @@
         <button class="btn btn-block btn-success text-center" type="submit">Send Invitations</button>
     </form>
 </div>
+
+<script>
+    var message_ele = document.getElementById('alert');
+    setTimeout(function(){
+        message_ele.style.display = "none";
+    }, 3000);
+</script>
 
 {% endblock %}
