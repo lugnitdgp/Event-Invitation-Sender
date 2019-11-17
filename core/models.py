@@ -7,6 +7,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     starttime = models.DateTimeField()
     endtime = models.DateTimeField()
+    sent = models.BooleanField(default=False)
 
     def __str__(self):
         return self.summary

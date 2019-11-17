@@ -7,6 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from yaml import load, dump
 from celery import shared_task
+from core.models import Event
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -46,10 +47,13 @@ def authorize_and_prepare_service():
     return service
 
 @shared_task
-def send_invitations_in_background(data):
+def send_invitations_in_background(data, event_id):
     service = authorize_and_prepare_service()
     service.events().insert(
         calendarId='primary', 
         body=prepare_event_body(data),
         sendNotifications=True
     ).execute()
+    event = Event.objects.get(id=event_id)
+    event.sent = True
+    event.save()

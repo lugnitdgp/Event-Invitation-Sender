@@ -19,6 +19,7 @@ def index(request):
                 endtime = request.POST['endtime']
             )
             event.save()
+            event_id = event.id
             attendees = Attendee.objects.all()
             send_invitations_in_background.delay({
                 'summary': request.POST['summary'],
@@ -27,7 +28,7 @@ def index(request):
                 'attendees': [attendee.email for attendee in attendees],
                 'starttime': request.POST['starttime'] + ':00',
                 'endtime': request.POST['endtime'] + ':00'
-            })  
+            }, event_id)
             messages.info(request, 'Invitations will be sent shortly.')
         else:
             messages.info(request, 'Something went wrong !')
