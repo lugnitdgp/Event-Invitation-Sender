@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponse
 from core.forms import EventForm
 from core.models import Event, Attendee
 from core.tasks import send_invitations_in_background
@@ -8,6 +9,8 @@ import pytz
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponse('Please login as admin to use the app.')
     if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid:
