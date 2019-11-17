@@ -25,7 +25,7 @@ $ pip install -r requirements.txt
 
 $ python manage.py migrate
 
-$ celery -A proj worker -l info
+$ celery -A inviter worker -l info
 
 $ python manage.py runserver
 ```
