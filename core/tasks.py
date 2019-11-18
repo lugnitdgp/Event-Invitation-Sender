@@ -2,8 +2,10 @@ from __future__ import absolute_import, unicode_literals, print_function
 import datetime
 import pickle
 import os
+from django.conf import settings
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2 import service_account
 from google.auth.transport.requests import Request
 from yaml import load, dump
 from celery import shared_task
@@ -13,8 +15,6 @@ try:
 except ImportError:
     from yaml import Loader
 
-
-SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def prepare_event_body(data):
     attendees = data['attendees']
@@ -38,12 +38,11 @@ def prepare_event_body(data):
     return event
 
 def authorize_and_prepare_service():
-    token = os.path.join(os.environ['HOME'], 'Desktop/inviter_files/token.pickle')
-    creds = None
-    if os.path.exists(token):
-        with open(token, 'rb') as token:
-            creds = pickle.load(token)
-    service = build('calendar', 'v3', credentials=creds)
+    SCOPES = ['https://www.googleapis.com/auth/calendar']
+    SERVICE_ACCOUNT_FILE = settings.GOOGLE_API_SERVICE_ACCOUNT_FILE
+    credentials = service_account.Credentials.from_service_account_file(
+            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    service = build('calendar', 'v3', credentials=credentials)
     return service
 
 @shared_task
